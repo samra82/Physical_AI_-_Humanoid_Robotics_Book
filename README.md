@@ -75,5 +75,5 @@ By completing this textbook, students will be able to:
 
 ## Deployment
 
-The textbook is deployed using **Vercel**. You can access the live version here: https://your-vercel-project-url.vercel.app
+The textbook is deployed using **Vercel**. You can access the live version here:[ physical-ai-humanoid-robotics-book-mpd9s80be.vercel.app](https://physical-ai-humanoid-robotics-book-steel.vercel.app/)
 
