@@ -1,0 +1,114 @@
+# API Contract: RAG Chatbot Service
+
+## Overview
+This document defines the API contracts for the RAG Chatbot service that will integrate with the existing my-book frontend.
+
+## Base URL
+`http://localhost:8000/api/v1` (or as configured)
+
+## Authentication
+All endpoints require API key authentication in the header:
+```
+Authorization: Bearer {API_KEY}
+```
+
+## Endpoints
+
+### Health Check
+```
+GET /health
+```
+
+**Description**: Check if the service is running and healthy
+
+**Response**:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2025-12-16T10:30:00Z"
+}
+```
+
+### Chat Endpoint
+```
+POST /chat
+```
+
+**Description**: Send a user query and receive an AI-generated response with source references
+
+**Request Body**:
+```json
+{
+  "message": "string (required) - User's query message",
+  "session_id": "string (optional) - Session identifier for maintaining conversation context"
+}
+```
+
+**Response**:
+```json
+{
+  "response": "string - AI-generated response",
+  "session_id": "string - Session identifier (new or existing)",
+  "sources": [
+    {
+      "id": "string - ID of the knowledge chunk used",
+      "content": "string - Relevant content snippet",
+      "source_url": "string - URL where content was extracted from",
+      "section_title": "string - Title of the book section"
+    }
+  ],
+  "confidence_score": "number - Confidence level of the response (0-1)"
+}
+```
+
+### Process URL Endpoint
+```
+POST /process-url
+```
+
+**Description**: Extract content from a URL, generate embeddings, and store in vector database
+
+**Request Body**:
+```json
+{
+  "url": "string (required) - URL to extract content from"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "processing|completed|failed",
+  "message": "string - Status message",
+  "chunks_processed": "number - Number of content chunks processed"
+}
+```
+
+### Retrieve Context Endpoint
+```
+POST /retrieve
+```
+
+**Description**: Retrieve relevant context from the vector database based on a query
+
+**Request Body**:
+```json
+{
+  "query": "string (required) - Query to find relevant context",
+  "top_k": "number (optional, default: 5) - Number of relevant chunks to retrieve"
+}
+```
+
+**Response**:
+```json
+{
+  "retrieved_chunks": [
+    {
+      "id": "string - ID of the knowledge chunk",
+      "content": "string - Content of the chunk",
+      "similarity_score": "number - Similarity score between query and chunk",
+      "metadata": "object - Additional metadata about the chunk"
+    }
+  ]
+}
+```
